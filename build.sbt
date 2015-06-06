@@ -15,6 +15,9 @@ lazy val deps: Seq[sbt.Def.Setting[_]] =  Seq(
     "io.spray"          %% "spray-json"     % "1.3.1"
   ))
 
+libraryDependencies in ThisBuild +=
+  "org.scalatest" %% "scalatest" % "2.2.4" % "test"
+
 lazy val amazonDeps: Seq[sbt.Def.Setting[_]] =  Seq(
   libraryDependencies += "com.amazonaws" % "aws-java-sdk" % "1.9.13")
 
@@ -33,13 +36,14 @@ lazy val root = Project(
         packageDescription   := "Scala Bot",
         packageSummary       := "Automates stuff on Github"),
     // always run all commands on each sub project
-    aggregate = Seq(core, amazon, github, jenkins, server)
+    aggregate = Seq(core, amazon, github, cli, jenkins, server)
 ) dependsOn(gui) // this does the actual aggregation
 
 lazy val core    = project settings (deps: _*)
 lazy val github  = project dependsOn (core)
 lazy val jenkins = project dependsOn (core)
 lazy val typesafe = project dependsOn (core)
+lazy val cli     = project dependsOn (github)
 lazy val amazon  = project dependsOn (core) settings (amazonDeps: _*)
 lazy val server  = project dependsOn (amazon, github, jenkins, typesafe)
 lazy val gui     = project dependsOn (server) enablePlugins(PlayScala) settings (guiSettings: _*)
