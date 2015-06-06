@@ -1,9 +1,10 @@
 language: scala
 script:
-  - sbt ++$TRAVIS_SCALA_VERSION compile
+  - sbt -Dscabot.github.token=$GITHUB_TOKEN ++$TRAVIS_SCALA_VERSION compile
 scala:
   - 2.11.6
-# we actually build and run on openjdk8 in production, see scala-jenkins-infra
+# we actually build and run on openjdk8 in production, see scala-jenkins-infra.
+# but (as of June 2015) Travis only supports Oracle Java 8, not OpenJDK 8
 jdk:
   - oraclejdk8
 notifications:
@@ -18,5 +19,6 @@ cache:
 env:
   global:
     - GIT_SSH=.travis/ssh_scabot
+  secure: "Bx8mF/wAls44JzGtAYKy/9IeH+JsWHBvPzTRoNhy/n8aOPP9A1Tub06uCQEpONWn1mddocwy4kDjR0e1iB8ct3ly5/Vt3NqobZ8S88/xWOEx5aFOm5WO/yJxGydiBlBH20jX1pmkSa8G1+8drDdx9UrjisjTmLL9mJ131yfVyMM="
 after_success:
   - openssl aes-256-cbc -K $encrypted_046e6a226c09_key -iv $encrypted_046e6a226c09_iv -in .travis/scabot.pem.enc -out .travis/scabot.pem -d && git push --force scabot@scala-ci.typesafe.com:/home/scabot/scabot master:master
