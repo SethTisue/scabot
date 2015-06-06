@@ -1,6 +1,6 @@
 language: scala
 script:
-  - sbt -Dscabot.github.token=$GITHUB_TOKEN ++$TRAVIS_SCALA_VERSION compile
+  - sbt -Dscabot.github.token=$GITHUB_TOKEN ++$TRAVIS_SCALA_VERSION test
 scala:
   - 2.11.6
 # we actually build and run on openjdk8 in production, see scala-jenkins-infra.
