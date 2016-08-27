@@ -5,7 +5,7 @@ import scala.concurrent.{ Future, Await }
 import scala.concurrent.duration.Duration
 
 class CLI(configName: String)
-    extends github.GithubApi
+    extends github.GithubApi with jenkins.JenkinsApi
     with core.Configuration with core.HttpClient with core.Core {
 
   override def configFile =
@@ -20,6 +20,9 @@ class CLI(configName: String)
 
   lazy val api =
     new GithubConnection(configs(configName).github)
+
+  lazy val jenkinsApi =
+    new JenkinsConnection(configs(configName).jenkins)
 
   def await[T](f: Future[T]): T =
     Await.result(f, Duration.Inf)
